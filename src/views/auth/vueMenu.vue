@@ -60,7 +60,7 @@
           <el-input v-model="menu.component" placeholder="" />
         </el-form-item>
 
-        <el-form-item label="标题" prop="meta">
+        <el-form-item label="标题" prop="">
           <el-input v-model="menu.meta.title" placeholder="" />
         </el-form-item>
 
@@ -160,7 +160,7 @@ export default {
     appendMenu(data) {
       this.resetMenu()
       this.clickMenu = data
-      this.dialogType = 'new'
+      this.dialogType = 'append'
       this.dialogVisible = true
 
       this.$nextTick(() => {
@@ -185,7 +185,7 @@ export default {
     },
 
     handleDelete(node, data) {
-      this.$confirm('确认删除角色？', 'Warning', {
+      this.$confirm('确认删除菜单？', 'Warning', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
@@ -224,7 +224,11 @@ export default {
         const { data } = await addMenu(this.menu)
         this.menu.id = data.id
 
-        if (this.clickMenu) {
+        if (this.dialogType === 'new') {
+          this.menus.push(this.menu)
+          console.log('this.menus', this.menus)
+        } else {
+          console.log('this.clickMenu', this.clickMenu)
           // tree 节点添加新增的菜单
           const clickMenu = this.clickMenu
           if (! clickMenu.children) {
