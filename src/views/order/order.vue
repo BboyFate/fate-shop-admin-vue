@@ -24,31 +24,31 @@
           {{ row.no }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="买家" width="220">
+      <el-table-column align="center" label="买家">
         <template slot-scope="{ row }">
           {{ row.user.nickname }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="总金额" width="220">
+      <el-table-column align="center" label="总金额">
         <template slot-scope="{ row }">
           {{ row.total_amount }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="退款状态" width="220">
+      <el-table-column align="center" label="退款状态">
         <template slot-scope="{ row }">
           <el-tag :type="row.refund_status | refundStatusStyleFilter">
             {{ row.refund_status | refundStatusFilter }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="物流" width="220">
+      <el-table-column align="center" label="物流">
         <template slot-scope="{ row }">
           <el-tag :type="row.ship_status | shipStatusStyleFilter">
             {{ row.ship_status | shipStatusFilter }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="支付时间" width="220">
+      <el-table-column align="center" label="支付时间">
         <template slot-scope="{ row }">
           {{ row.paid_at }}
         </template>

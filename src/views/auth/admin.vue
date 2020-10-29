@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column align="center" label="角色" width="220">
         <template slot-scope="scope">
-          {{ scope.row.roles }}
+          {{ scope.row.roles | rolesFilter }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="创建时间" width="220">
@@ -128,7 +128,14 @@ export default {
         'false': 'danger'
       }
       return isEnabledMap[status]
-    }
+    },
+    rolesFilter(roles) {
+      let str = ''
+      for (let item of roles) {
+        str += [item] + '、 '
+      }
+      return str
+    },
   },
   data() {
     const validatePhone = (rule, value, callback) => {

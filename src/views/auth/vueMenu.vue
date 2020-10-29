@@ -64,6 +64,10 @@
           <el-input v-model="menu.meta.title" placeholder="" />
         </el-form-item>
 
+        <el-form-item label="菜单高亮" prop="">
+          <el-input v-model="menu.meta.activeMenu" placeholder="这里可填写高亮的菜单 path" />
+        </el-form-item>
+
         <el-form-item label="icon 图标" prop="">
           <el-input v-model="menu.meta.icon" placeholder="" />
         </el-form-item>

@@ -13,17 +13,17 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="用户名" width="220">
+      <el-table-column align="center" label="用户名">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="创建时间" width="220">
+      <el-table-column align="center" label="创建时间">
         <template slot-scope="scope">
           {{ scope.row.created_at }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="更新时间" width="220">
+      <el-table-column align="center" label="更新时间">
         <template slot-scope="scope">
           {{ scope.row.updated_at }}
         </template>

@@ -1,4 +1,4 @@
-import{ asyncRoutes, constantRoutes } from '@/router'
+import{ constantRoutes } from '@/router'
 import { getRoleMenus } from '@/api/menu'
 import routeComponents from '@/router/components'
 
@@ -11,6 +11,7 @@ export function filterRoutes(routes) {
     if (tmp.children) {
       tmp.children = filterRoutes(tmp.children)
     }
+    tmp.hidden = !tmp.is_showed
     res.push(tmp)
   })
 
