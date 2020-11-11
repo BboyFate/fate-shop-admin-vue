@@ -346,7 +346,6 @@ export default {
     }
   },
   created() {
-    console.log('created')
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.getProduct(id)
@@ -588,7 +587,9 @@ export default {
     },
 
     async getProduct(id) {
-      await getProduct(id).then(response => {
+      await getProduct(id, {
+        include: 'crowdfunding,category,skus,skuAttributes',
+      }).then(response => {
         this.postForm = response.data
       }).catch(err => {
         console.log(err)

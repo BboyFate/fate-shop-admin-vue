@@ -185,6 +185,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 import Pagination from '@/components/Pagination'
 import { deepClone } from '@/utils'
 import {
@@ -224,7 +225,11 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 10,
+        include: 'user,items.product.crowdfunding,items.productSku',
+        fields: {
+          user: 'id,nickname',
+        }
       },
       orderShip: {
         express_company: '',

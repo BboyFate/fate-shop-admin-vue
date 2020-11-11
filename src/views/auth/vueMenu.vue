@@ -230,9 +230,7 @@ export default {
 
         if (this.dialogType === 'new') {
           this.menus.push(this.menu)
-          console.log('this.menus', this.menus)
         } else {
-          console.log('this.clickMenu', this.clickMenu)
           // tree 节点添加新增的菜单
           const clickMenu = this.clickMenu
           if (! clickMenu.children) {

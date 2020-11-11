@@ -103,7 +103,8 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 10,
+        include: 'crowdfunding,category',
       },
     }
   },

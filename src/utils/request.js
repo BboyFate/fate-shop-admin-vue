@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -14,7 +13,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     if (store.getters.token) {
-      config.headers['Authorization'] = 'Bearer ' + getToken()
+      config.headers['Authorization'] = store.getters.token
     }
     return config
   },
@@ -39,7 +38,11 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
-    console.log('response: ', response)
+    // 响应头有 token，需无痛刷新 token
+    let refreshToken = response.headers.authorization
+    if (refreshToken) {
+      store.dispatch('admin/refreshToken', refreshToken)
+    }
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.status === "error") {
@@ -69,11 +72,6 @@ service.interceptors.response.use(
     }
 
     console.log('response err: ' + error) // for debug
-    // Message({
-    //   message: error.response.data.message,
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
     return Promise.reject(error)
   }
 )

@@ -6,7 +6,6 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: '',
     roles: []
   }
 }
@@ -23,9 +22,6 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  },
   SET_ROLES: (state, roles) => {
     state.roles = roles
   }
@@ -38,8 +34,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.access_token)
-        setToken(data.access_token)
+        commit('SET_TOKEN', 'Bearer ' + data.access_token)
+        setToken('Bearer ' + data.access_token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -54,10 +50,9 @@ const actions = {
         if (! response.data) {
           return reject('验证失败，请再登录')
         }
-        const { nickname, avatar, roles } = response.data
+        const { nickname, roles } = response.data
 
         commit('SET_NAME', nickname)
-        commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)
         resolve(response.data)
       }).catch(error => {
@@ -77,6 +72,15 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
+    })
+  },
+
+  // refresh token
+  refreshToken({ commit }, token) {
+    return new Promise(resolve => {
+      commit('SET_TOKEN', token)
+      setToken(token)
+      resolve()
     })
   },
 

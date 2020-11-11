@@ -1,10 +1,14 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
-export function getOrders(query) {
+export function getOrders(params) {
   return request({
     url: '/orders',
     method: 'get',
-    params: query
+    params,
+    paramsSerializer: function (params) {
+      return qs.stringify( params , { arrayFormat: 'indices' })
+    }
   })
 }
 

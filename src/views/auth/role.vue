@@ -18,6 +18,11 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
+      <el-table-column align="center" label="备注">
+        <template slot-scope="scope">
+          {{ scope.row.description }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="创建时间" width="220">
         <template slot-scope="scope">
           {{ scope.row.created_at }}
@@ -98,7 +103,10 @@ export default {
       roleLoading: true,
       roleQuery: {
         page: 1,
-        limit: 10
+        limit: 10,
+        include: 'permissions,vueMenus',
+        fields: {
+        }
       },
       menus: [],
       serviceMenus: [],
@@ -235,7 +243,6 @@ export default {
       this.role = deepClone(scope.row)
       this.$nextTick(() => {
         const menus = this.generateMenus(this.role.vue_menus)
-        console.log('this.generateArr(menus)', menus)
         this.$refs.tree.setCheckedNodes(this.generateArr(menus))
         this.$refs.permissionTree.setCheckedNodes(this.role.permissions)
         // 设置节点的检查状态，不影响其父节点和子节点

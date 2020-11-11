@@ -18,6 +18,11 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
+      <el-table-column align="center" label="备注">
+        <template slot-scope="scope">
+          {{ scope.row.description }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="创建时间">
         <template slot-scope="scope">
           {{ scope.row.created_at }}

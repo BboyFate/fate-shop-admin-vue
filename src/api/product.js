@@ -1,18 +1,25 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
-export function getProducts(query) {
+export function getProducts(params) {
   return request({
     url: '/products',
     method: 'get',
-    params: query
+    params,
+    paramsSerializer: function (params) {
+      return qs.stringify( params , { arrayFormat: 'indices' })
+    }
   })
 }
 
-export function getProduct(id, query) {
+export function getProduct(id, params) {
   return request({
     url: `/products/${id}`,
     method: 'get',
-    params: query
+    params,
+    paramsSerializer: function (params) {
+      return qs.stringify( params , { arrayFormat: 'indices' })
+    }
   })
 }
 
@@ -32,11 +39,14 @@ export function updateProduct(id, data) {
   })
 }
 
-export function getCrowdfundingProducts(query) {
+export function getCrowdfundingProducts(params) {
   return request({
     url: '/crowdfunding_products',
     method: 'get',
-    params: query
+    params,
+    paramsSerializer: function (params) {
+      return qs.stringify( params , { arrayFormat: 'indices' })
+    }
   })
 }
 
