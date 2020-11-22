@@ -200,6 +200,7 @@ import { getOrders, ship, refund } from '@/api/order'
 
 
 export default {
+  name: 'Order',
   components: {
     Pagination
   },

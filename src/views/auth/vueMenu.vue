@@ -64,6 +64,18 @@
           <el-input v-model="menu.meta.title" placeholder="" />
         </el-form-item>
 
+        <el-form-item label="keep-alive 不缓存" prop="">
+          <el-input v-model="menu.meta.noCache" placeholder="设置为 true，则不会被 <keep-alive> 缓存(默认 false)" />
+        </el-form-item>
+
+        <el-form-item label="面包屑显示" prop="">
+          <el-input v-model="menu.meta.breadcrumb" placeholder="设置为 false，则不会在 breadcrumb 面包屑中显示(默认 true)" />
+        </el-form-item>
+
+        <el-form-item label="affix" prop="">
+          <el-input v-model="menu.meta.affix" placeholder="设置为 true，它则会固定在 tags-view 中(默认 false)" />
+        </el-form-item>
+
         <el-form-item label="菜单高亮" prop="">
           <el-input v-model="menu.meta.activeMenu" placeholder="这里可填写高亮的菜单 path" />
         </el-form-item>
@@ -104,6 +116,7 @@ import { deepClone } from '@/utils'
 import { getMenus, addMenu, updateMenu, deleteMenu } from '@/api/menu'
 
 export default {
+  name: 'VueMenu',
   data() {
     return {
       menu: {

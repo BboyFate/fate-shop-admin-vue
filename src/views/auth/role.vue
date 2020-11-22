@@ -94,6 +94,7 @@ const defaultRole = {
 }
 
 export default {
+  name: 'Role',
   components: { Pagination },
   data() {
     return {

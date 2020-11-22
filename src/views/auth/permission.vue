@@ -70,6 +70,7 @@
   }
 
   export default {
+    name: 'Permission',
     components: { Pagination },
     data() {
       return {

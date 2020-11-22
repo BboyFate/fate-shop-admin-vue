@@ -76,7 +76,7 @@
       return {
         actionUrl: process.env.VUE_APP_BASE_API + '/images',
         imageHeaders: {
-          Authorization: 'Bearer ' + getToken()
+          Authorization: getToken()
         },
         requestImageData: {},
         list: [],

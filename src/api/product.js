@@ -23,6 +23,17 @@ export function getProduct(id, params) {
   })
 }
 
+export function getProductDetail(id, params) {
+  return request({
+    url: `/products/${id}/detail`,
+    method: 'get',
+    params,
+    paramsSerializer: function (params) {
+      return qs.stringify( params , { arrayFormat: 'indices' })
+    }
+  })
+}
+
 export function addProduct(data) {
   return request({
     url: '/products',
@@ -83,14 +94,6 @@ export function deleteProductSku(skuId) {
 export function deleteProductSkus(data) {
   return request({
     url: `/product_skus/delete`,
-    method: 'post',
-    data
-  })
-}
-
-export function productSkuAttrFormat(data) {
-  return request({
-    url: '/product_sku_attributes/format',
     method: 'post',
     data
   })

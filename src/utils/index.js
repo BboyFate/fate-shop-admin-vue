@@ -137,3 +137,44 @@ export function deepClone(source) {
   })
   return targetObj
 }
+
+/**
+ * 数组去重
+ */
+export function uniqueArray(arr) {
+  return Array.from(new Set(arr))
+}
+
+export function diffArrays(arr1, arr2) {
+  arr1 = uniqueArray(arr1)
+  arr2 = uniqueArray(arr2)
+
+  return arr1.concat(arr2)
+    .filter(arg => !(arr1.includes(arg) && arr2.includes(arg)))
+}
+
+export function eqArrays(arr1, arr2) {
+  arr1 = uniqueArray(arr1)
+  arr2 = uniqueArray(arr2)
+
+  let newArr = [];
+  for (let i = 0; i < arr2.length; i++) {
+    for (let j = 0; j < arr1.length; j++) {
+      if(arr1[j] === arr2[i]){
+        newArr.push(arr1[j]);
+      }
+    }
+  }
+
+  return newArr;
+}
+
+/**
+ * 生成随机唯一字符串
+ * @returns {string}
+ */
+export function generateUniqueString() {
+  const timestamp = +new Date() + ''
+  const randomNum = parseInt((1 + Math.random()) * 65536) + ''
+  return (+(randomNum + timestamp)).toString(32)
+}

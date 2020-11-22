@@ -120,6 +120,7 @@ const defaultAdmin = {
 }
 
 export default {
+  name: 'Admin',
   components: { Pagination },
   filters: {
     isEnabledFilter(status) {
