@@ -26,8 +26,30 @@
           <el-input class="app-input-small" v-model="postForm.number" placeholder="可输入货号" clearable />
         </el-form-item>
         <el-form-item label="商品封面图" prop="image">
-          <el-image v-if="postForm.image" style="width: 100px; height: 100px" :src="postForm.image" @click="isSelectImageShowed=true"></el-image>
-          <i v-else class="el-icon-picture" style="font-size: 100px;" @click="isSelectImageShowed=true"></i>
+          <ul class="el-upload-list el-upload-list--picture-card">
+            <li v-if="postForm.image" class="el-upload-list__item" @click="isSelectImageShowed=true">
+              <img :src="postForm.image">
+            </li>
+            <div v-else class="el-upload el-upload--picture-card" @click="isSelectImageShowed=true">
+              <i class="el-icon-picture"></i>
+            </div>
+          </ul>
+        </el-form-item>
+        <el-form-item label="商品轮播图" prop="banners">
+          <ul class="el-upload-list el-upload-list--picture-card">
+            <li v-for="(banner, bannerIndex) in postForm.banners" class="el-upload-list__item">
+              <img :src="banner">
+              <span class="el-upload-list__item-actions">
+                <span class="el-upload-list__item-delete" @click="handleDeleteBanner(bannerIndex)">
+                  <i class="el-icon-delete"></i>
+                </span>
+              </span>
+            </li>
+            <div v-if="postForm.banners && postForm.banners.length < 2" class="el-upload el-upload--picture-card" @click="handleAddBanner">
+              <i class="el-icon-plus"></i>
+            </div>
+          </ul>
+          <div class="el-upload__tip">最多可上传 5 张</div>
         </el-form-item>
 
         <h3>商品类目</h3>
@@ -36,7 +58,6 @@
             v-model="postForm.category_id"
             :options="this.categories"
             :props="{ expandTrigger: 'hover' }"
-            @change="handleCategory"
             clearable
           />
         </el-form-item>
@@ -85,6 +106,7 @@ import {
   addCrowdfundingProduct,
   updateCrowdfundingProduct,
 } from '@/api/product'
+import { generateCategorySelector } from '@/utils'
 
 const defaultForm = {
   id: 0,
@@ -142,9 +164,12 @@ export default {
   data() {
     return {
       postForm: Object.assign({}, defaultForm),
-      isSelectImageShowed: false, // 显示图片库
       categories: [], // 所有分类
       loading: false,
+
+      isSelectImageShowed: false, // 显示图片库
+      imageOrigin: '',
+
       crowdfundingEndAtOptions: {
         shortcuts: [{
           text: '明天',
@@ -172,7 +197,8 @@ export default {
         title: [{ required: true, message: '请输入商品标题', trigger: 'blur' }],
         long_title: [{ required: true, message: '请输入商品长标题', trigger: 'blur' }],
         number: [{ required: false, message: '请输入商品货号', trigger: 'blur' }],
-        image: [{ required: true, message: '请请上传商品主图', trigger: 'change' }],
+        image: [{ required: true, message: '请上传商品主图', trigger: 'change' }],
+        banners: [{ required: true, message: '请上传商品轮播图', trigger: 'change' }],
         category_id: [{ required: true, message: '请设置商品所属类目', trigger: 'blur' }],
         crowdfunding: {
           type: 'object',
@@ -200,10 +226,28 @@ export default {
   },
   methods: {
     /**
+     * 删除商品某张轮播图
+     */
+    handleDeleteBanner(bannerIndex) {
+      this.postForm.banners.splice(bannerIndex, 1)
+    },
+    /**
+     * 添加商品轮播图
+     */
+    handleAddBanner() {
+      this.imageOrigin = 'banner'
+      this.isSelectImageShowed = true
+    },
+
+    /**
      * 选择图片库的图片，保存到商品主图
      */
     handleSelectedImages(images) {
-      this.postForm.image = images[0].path
+      if (this.imageOrigin == 'banner') {
+        this.postForm.banners.push(images[0].path)
+      } else {
+        this.postForm.image = images[0].path
+      }
     },
 
     /**
@@ -213,47 +257,15 @@ export default {
       await getProductDetail(id, {
         include: 'crowdfunding,category,skus,attributes,description',
       }).then(response => {
-        console.log('response.data', response.data)
         if (response.data.product) {
           this.postForm = response.data.product
           this.$refs.productSkus._setData(response.data.product.skus)
         }
-        this.categories = this.formatCategoryTree(response.data.categories)
+        this.categories = generateCategorySelector(response.data.categories)
         this.$refs.productSkus._setProductAttrTemplates(response.data.attribute_templates)
       }).catch(err => {
         console.log(err)
       })
-    },
-
-    /**
-     * 格式化类目
-     * @param categories 所有商品分类
-     */
-    formatCategoryTree(categories) {
-      return categories.map(category => {
-        let data = {
-          'value': category.id,
-          'label': category.name
-        }
-        if (category.children) {
-          data.children = this.formatCategoryTree(category.children)
-        }
-        return data
-      })
-    },
-
-    /**
-     * 格式化类目
-     * @param categories 所有商品分类
-     */
-    /**
-     * 选择一个类目
-     * @param categoryIds 选择的类目 ID 包括所有父 ID
-     */
-    handleCategory(categoryIds) {
-      if (this.postForm.category_id.length) {
-        this.postForm.category_id = this.postForm.category_id.[this.postForm.category_id.length - 1]
-      }
     },
 
     /**
@@ -318,6 +330,10 @@ export default {
     submitForm() {
       this.$refs.postForm.validate(async (valid) => {
         if (valid) {
+          if (this.postForm.category_id.length > 0) {
+            this.postForm.category_id = this.postForm.category_id.pop()
+          }
+
           const postForm = this.postForm
           const postData = {
             title: postForm.title,
@@ -366,6 +382,7 @@ export default {
                   this.productNotify('新增商品成功')
                 })
             }
+            setTimeout(this.$router.back(-1), 2000)
           }
           this.loading = false
         } else {

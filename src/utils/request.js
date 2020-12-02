@@ -18,7 +18,6 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    console.log('request err: ', error) // for debug
     return Promise.reject(error)
   }
 )
@@ -58,7 +57,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-
     if (error.response.status === 401) {
       MessageBox.confirm('你的登录已过期', {
         confirmButtonText: '重新登录',
@@ -71,7 +69,12 @@ service.interceptors.response.use(
       })
     }
 
-    console.log('response err: ' + error) // for debug
+    Message({
+      message: error.response.data.message || 'Error',
+      type: 'error',
+      duration: 5 * 1000
+    })
+
     return Promise.reject(error)
   }
 )

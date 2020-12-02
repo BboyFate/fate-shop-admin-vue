@@ -23,10 +23,10 @@
 .sku_group
   margin-bottom: 10px
   &:hover
-    .spec_title .remove
+    .attr_title .remove
       display: block
 
-.spec_title
+.attr_title
   position: relative
   padding: 7px 10px
   background-color: #f8f8f8
@@ -95,7 +95,7 @@
   el-form-item
       .sku_container
         .sku_group.mb10(v-for="(productAttribute, productAttributeIndex) in productAttributes" :key="productAttribute.id")
-          .spec_title
+          .attr_title
             span.label 规格名：
             el-input.input(placeholder='请输入规格名' v-model.trim="productAttribute.name")
             span.remove(@click="handleDeleteProductAttributes(productAttributeIndex)") ×
@@ -120,7 +120,7 @@
               @keyup.native.enter='enterAddProductAttributeValue(productAttributeIndex)'
               @blur='enterAddProductAttributeValue(productAttributeIndex)'
             )
-        .spec_title
+        .attr_title
           el-button(type='info' :disabled='disabled' @click='handleAddProductAttributes') 添加规格
 
   el-form-item

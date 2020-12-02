@@ -10,6 +10,8 @@ const CreateProduct = () => import('@/views/product/create')
 const CrowdfundingProduct = () => import('@/views/product/crowdfunding/crowdfunding')
 const EditCrowdfundingProduct = () => import('@/views/product/crowdfunding/edit')
 const CreateCrowdfundingProduct = () => import('@/views/product/crowdfunding/create')
+const ProductCategory = () => import('@/views/product/category/category')
+const ProductAttributeTemplate = () => import('@/views/product/attribute-template/template')
 
 export default {
   Layout: Layout,
@@ -24,4 +26,6 @@ export default {
   CrowdfundingProduct: CrowdfundingProduct,
   EditCrowdfundingProduct: EditCrowdfundingProduct,
   CreateCrowdfundingProduct: CreateCrowdfundingProduct,
+  ProductCategory: ProductCategory,
+  ProductAttributeTemplate: ProductAttributeTemplate,
 };

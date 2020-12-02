@@ -178,3 +178,20 @@ export function generateUniqueString() {
   const randomNum = parseInt((1 + Math.random()) * 65536) + ''
   return (+(randomNum + timestamp)).toString(32)
 }
+
+/**
+ * 格式化类目，用于选择器
+ * @param categories 所有商品分类
+ */
+export function generateCategorySelector(categories) {
+  return categories.map(category => {
+    let data = {
+      'value': category.id,
+      'label': category.name
+    }
+    if (category.children) {
+      data.children = generateCategorySelector(category.children)
+    }
+    return data
+  })
+}
