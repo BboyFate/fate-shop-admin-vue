@@ -157,16 +157,16 @@ export function eqArrays(arr1, arr2) {
   arr1 = uniqueArray(arr1)
   arr2 = uniqueArray(arr2)
 
-  let newArr = [];
+  const newArr = []
   for (let i = 0; i < arr2.length; i++) {
     for (let j = 0; j < arr1.length; j++) {
-      if(arr1[j] === arr2[i]){
-        newArr.push(arr1[j]);
+      if (arr1[j] === arr2[i]) {
+        newArr.push(arr1[j])
       }
     }
   }
 
-  return newArr;
+  return newArr
 }
 
 /**
@@ -185,7 +185,7 @@ export function generateUniqueString() {
  */
 export function generateCategorySelector(categories) {
   return categories.map(category => {
-    let data = {
+    const data = {
       'value': category.id,
       'label': category.name
     }
@@ -194,4 +194,67 @@ export function generateCategorySelector(categories) {
     }
     return data
   })
+}
+
+/**
+ * 构造树型结构数据
+ *
+ * @param data        数据源
+ * @param id 字段     默认 'id'
+ * @param parentId    父节点字段 默认 'parent_id'
+ * @param children    子节点字段 默认 'children'
+ * @param rootId      根Id 默认 0
+ * @returns {*}
+ */
+export function generateTree(data, id, parentId, children, rootId) {
+  id = id || 'id'
+  parentId = parentId || 'parent_id'
+  children = children || 'children'
+  rootId = rootId || Math.min.apply(Math, data.map(item => { return item[parent_id] })) || 0
+
+  // 对源数据深度克隆
+  const cloneData = JSON.parse(JSON.stringify(data))
+
+  // 循环所有项
+  const treeData = cloneData.filter(father => {
+    const branchArr = cloneData.filter(child => {
+      // 返回每一项的子级数组
+      return father[id] === child[parent_id]
+    })
+    branchArr.length > 0 ? father.children = branchArr : ''
+    // 返回第一层
+    return father[parent_id] === rootId
+  })
+
+  return treeData != '' ? treeData : data
+}
+
+/**
+ * 重置表单
+ *
+ * @param refName
+ */
+export function resetForm(refName) {
+  if (this.$refs[refName]) {
+    this.$refs[refName].resetFields()
+  }
+}
+
+/**
+ * 字段值的数据字典转换
+ *
+ * @param dictionaries
+ * @param value
+ *
+ * @returns {string}
+ */
+export function selectDictLabel(dictionaries, value) {
+  let actions = []
+  Object.keys(dictionaries).some((key) => {
+    if (dictionaries[key].value == value) {
+      actions.push(dictionaries[key].lavel)
+      return true
+    }
+  })
+  return actions.join('')
 }

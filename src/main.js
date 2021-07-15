@@ -1,19 +1,45 @@
 import Vue from 'vue'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
-
-import '@/styles/index.scss' // global css
+import '@/assets/styles/index.scss' // global css
+import '@/assets/icons' // icon
+import '@/permission' // 权限控制
 
 import App from './App'
 import store from './store'
 import router from './router'
+import permission from './directive/permission' // 自定义权限指令
+import { resetForm, selectDictLabel } from '@/utils/index'
 
-import '@/icons' // icon
-import '@/permission' // permission control
+/**
+ * 全局方法挂载
+ */
+Vue.prototype.msgSuccess = function(msg) {
+  this.$message({ showClose: true, message: msg, type: 'success' })
+}
+Vue.prototype.msgError = function(msg) {
+  this.$message({ showClose: true, message: msg, type: 'error' })
+}
+Vue.prototype.resetForm = resetForm
+Vue.prototype.selectDictLabel = selectDictLabel
+Vue.prototype.refreshCachedView = function ($vm) {
+  $vm.$store.dispatch('tagsView/delCachedView', $vm.$route).then(() => {
+    const { fullPath } = $vm.$route
+    $vm.$nextTick(() => {
+      $vm.$router.replace({
+        path: '/redirect' + fullPath
+      })
+    })
+  })
+}
+
+/**
+ * 全局安装插件
+ */
+Vue.use(permission)
 
 /**
  * If you don't want to use mock-server

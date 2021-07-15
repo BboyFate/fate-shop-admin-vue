@@ -34,24 +34,24 @@ export const constantRoutes = [
   {
     path: '/redirect',
     component: Layout,
-    hidden: true,
+    is_showed: true,
     children: [
       {
         path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index')
+        component: () => import('@/views/redirect')
       }
     ]
   },
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    component: () => import('@/views/login'),
+    is_showed: true
   },
 
   {
     path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
+    component: () => import('@/views/errors/404'),
+    is_showed: true
   },
 
   {
@@ -73,7 +73,7 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

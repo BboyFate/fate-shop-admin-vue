@@ -38,13 +38,13 @@ service.interceptors.response.use(
     const res = response.data
 
     // 响应头有 token，需无痛刷新 token
-    let refreshToken = response.headers.authorization
+    const refreshToken = response.headers.authorization
     if (refreshToken) {
       store.dispatch('admin/refreshToken', refreshToken)
     }
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.status === "error") {
+    if (res.status === 'error') {
       Message({
         message: res.message || 'Error',
         type: 'error',

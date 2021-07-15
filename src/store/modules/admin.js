@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/admin'
+import { login, logout, getInfo } from '@/api/systems/me'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    roles: []
+    roles: [],
+    permissions: [],
   }
 }
 
@@ -24,15 +25,20 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_PERMISSIONS: (state, permissions) => {
+    state.permissions = permissions
   }
 }
 
 const actions = {
-  // user login
+  /**
+   * 登录
+   */
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { account, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ account: account.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', 'Bearer ' + data.access_token)
         setToken('Bearer ' + data.access_token)
@@ -43,17 +49,21 @@ const actions = {
     })
   },
 
-  // get user info
+  /**
+   * 获取登录账号个人信息
+   */
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo().then(response => {
-        if (! response.data) {
+        if (!response.data) {
           return reject('验证失败，请再登录')
         }
-        const { nickname, roles } = response.data
+        const { nickname, roles, permissions } = response.data
 
         commit('SET_NAME', nickname)
         commit('SET_ROLES', roles)
+        commit('SET_PERMISSIONS', permissions)
+
         resolve(response.data)
       }).catch(error => {
         reject(error)
@@ -61,7 +71,9 @@ const actions = {
     })
   },
 
-  // user logout
+  /**
+   * 退出登录
+   */
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
@@ -75,7 +87,9 @@ const actions = {
     })
   },
 
-  // refresh token
+  /**
+   * 刷新 Token
+   */
   refreshToken({ commit }, token) {
     return new Promise(resolve => {
       commit('SET_TOKEN', token)
@@ -84,7 +98,9 @@ const actions = {
     })
   },
 
-  // remove token
+  /**
+   * 删除 Token
+   */
   resetToken({ commit }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
